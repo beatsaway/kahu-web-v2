@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Kahu — play Kuba</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div id="app">
+    <header class="top">
+      <div class="brand">
+        <h1>Kahu</h1>
+        <p class="tag">Push marbles. Collect reds. Beat the engine.</p>
+      </div>
+      <nav class="modes" aria-label="Mode">
+        <button type="button" class="mode" data-mode="learn" aria-selected="false">Learn</button>
+        <button type="button" class="mode" data-mode="play" aria-selected="true">Play</button>
+        <button type="button" class="mode" data-mode="puzzles" aria-selected="false">Puzzles</button>
+      </nav>
+    </header>
+
+    <main class="stage">
+      <div id="board-host" class="board-host" aria-label="Kuba board">
+        <canvas id="board-canvas"></canvas>
+        <div id="toast" class="toast" hidden></div>
+      </div>
+
+      <aside class="panel">
+        <p id="status" class="status">Loading engine…</p>
+
+        <div class="score-row" aria-live="polite">
+          <div class="score-card you">
+            <span class="score-label">You</span>
+            <span id="score-you" class="score-num">0</span>
+            <span class="score-hint">/ 7 reds</span>
+          </div>
+          <div class="score-mid">vs</div>
+          <div class="score-card foe">
+            <span class="score-label">Kahu</span>
+            <span id="score-foe" class="score-num">0</span>
+            <span class="score-hint">/ 7 reds</span>
+          </div>
+        </div>
+
+        <!-- LEARN -->
+        <section id="learn-panel" class="mode-panel" hidden>
+          <p id="learn-step" class="coach">Welcome. Tap Next to learn how a push works.</p>
+          <div class="row">
+            <button type="button" id="btn-learn-back" class="ghost">Back</button>
+            <button type="button" id="btn-learn-next" class="primary">Next</button>
+          </div>
+          <button type="button" id="btn-learn-play" class="ghost wide">Skip to a real game</button>
+        </section>
+
+        <!-- PLAY -->
+        <section id="play-panel" class="mode-panel">
+          <p id="coach" class="coach">Tap one of your white marbles, then a glowing spot to push.</p>
+
+          <label class="field">
+            <span>Difficulty</span>
+            <select id="difficulty">
+              <option value="easy">Easy — thinks ~0.3s</option>
+              <option value="medium" selected>Medium — thinks ~1s</option>
+              <option value="hard">Hard — thinks ~3s</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>You play</span>
+            <select id="side">
+              <option value="white" selected>White (moves first)</option>
+              <option value="black">Black</option>
+            </select>
+          </label>
+
+          <div class="row">
+            <button type="button" id="btn-new" class="primary">New game</button>
+            <button type="button" id="btn-undo" class="ghost">Undo</button>
+          </div>
+          <div class="row">
+            <button type="button" id="btn-hint" class="ghost">Hint</button>
+            <button type="button" id="btn-flip" class="ghost">Flip board</button>
+          </div>
+
+          <details class="advanced">
+            <summary>Advanced</summary>
+            <label class="field">
+              <span>Search time (ms)</span>
+              <input id="movetime" type="number" min="50" max="30000" step="50" value="1000" />
+            </label>
+            <label class="field">
+              <span>KFEN</span>
+              <input id="kfen" spellcheck="false" />
+            </label>
+            <button type="button" id="btn-set" class="ghost wide">Set position</button>
+            <p id="engine-info" class="meta">depth — · nodes —</p>
+          </details>
+        </section>
+
+        <!-- PUZZLES -->
+        <section id="puzzle-panel" class="mode-panel" hidden>
+          <p id="puzzle-status" class="coach">Loading puzzles…</p>
+          <div class="row">
+            <button type="button" id="btn-puzzle-hint" class="ghost">Hint</button>
+            <button type="button" id="btn-puzzle-retry" class="ghost">Retry</button>
+          </div>
+          <div class="row">
+            <button type="button" id="btn-puzzle-solution" class="ghost">Solution</button>
+            <button type="button" id="btn-puzzle-next" class="primary">Next</button>
+          </div>
+          <p id="puzzle-progress" class="meta"></p>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
